@@ -2,7 +2,7 @@ import React from "react";
 
 import twitter from "../../assets/images/twitter-icon.png";
 
-const regex = /^(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/;
+const regex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
 
 const TweetCard = ({ tweetData }) => {
 
@@ -13,19 +13,31 @@ const TweetCard = ({ tweetData }) => {
     // } else {
     //     console.log("nope");
     // }
-    let m;
+    let m,p;
+    const pre = '<span class="text-blue-400 font-semibold">';
+    const suff = '</span>';
 
-    while ((m = regex.exec(bodyText)) !== null) {
-        // This is necessary to avoid infinite loops with zero-width matches
-        if (m.index === regex.lastIndex) {
-            regex.lastIndex++;
-        }
-        
-        // The result can be accessed through the `m`-variable.
-        m.forEach((match, groupIndex) => {
-            console.log(`Found match, group ${groupIndex}: ${match}`);
-        });
+    if (bodyText.includes("@")) {
+        p = bodyText.replace(regex, function (url) {
+            m = pre + url + suff;
+            return m;
+        })
+    } else{
+        p = bodyText;
     }
+
+
+    // while ((m = regex.exec(bodyText)) !== null) {
+    //     // This is necessary to avoid infinite loops with zero-width matches
+    //     if (m.index === regex.lastIndex) {
+    //         regex.lastIndex++;
+    //     }
+        
+    //     // The result can be accessed through the `m`-variable.
+    //     m.forEach((match, groupIndex) => {
+    //         console.log(`Found match, group ${groupIndex}: ${match}`);
+    //     });
+    // }
 
     return (
         <div className="flex flex-col gap-2 p-4 w-full sm:max-w-[300px] rounded-xl bg-[#1f3147] overflow-hidden">
@@ -39,7 +51,7 @@ const TweetCard = ({ tweetData }) => {
                 </div>
                 <img className=" rounded-sm w-[26px] h-[26px]" src={twitter} alt="twitter-icon" />
             </div>
-            <p className=" pb-2 text-sm font-light opacity-[0.68]" dangerouslySetInnerHTML={{ __html: `${tweetData.desc}` }} >{}</p>
+            <p className=" pb-2 text-sm font-light opacity-[0.68]" dangerouslySetInnerHTML={{ __html: `${p}` }} >{}</p>
         </div>
 
     )
