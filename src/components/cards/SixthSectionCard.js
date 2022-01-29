@@ -1,30 +1,25 @@
 import React from "react";
-
 import twitter from "../../assets/images/twitter-icon.png";
 
-const regex = /^(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/;
 
 const TweetCard = ({ tweetData }) => {
 
-    const bodyText =  tweetData?.desc;
-
-    // if (bodyText.match(regex)) {
-    //     console.log("matched");
-    // } else {
-    //     console.log("nope");
-    // }
-    let m;
-
-    while ((m = regex.exec(bodyText)) !== null) {
-        // This is necessary to avoid infinite loops with zero-width matches
-        if (m.index === regex.lastIndex) {
-            regex.lastIndex++;
-        }
-        
-        // The result can be accessed through the `m`-variable.
-        m.forEach((match, groupIndex) => {
-            console.log(`Found match, group ${groupIndex}: ${match}`);
-        });
+    const bodyText =  tweetData?.desc;   
+    const prefix = '<span class= "text-transparent bg-clip-text bg-gradient-to-r from-[#DC1FFF] via-[#03E1FF] to-[#00FFA3] font-semibold" >';
+    const suffix = '</span>';
+    let newBodyText;
+    let grabText;
+    
+    const regex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
+    if (bodyText.includes("@")) {
+        grabText = bodyText.replace(regex, function (url) {
+            newBodyText = prefix + url + suffix;
+            return newBodyText;
+        }) 
+        console.log(grabText);
+    }
+    else {
+        grabText = bodyText;
     }
 
     return (
@@ -39,7 +34,7 @@ const TweetCard = ({ tweetData }) => {
                 </div>
                 <img className=" rounded-sm w-[26px] h-[26px]" src={twitter} alt="twitter-icon" />
             </div>
-            <p className=" pb-2 text-sm font-light opacity-[0.68]" dangerouslySetInnerHTML={{ __html: `${tweetData.desc}` }} >{}</p>
+            <p className=" pb-2 text-sm font-light opacity-[0.68]" dangerouslySetInnerHTML={{__html: `${grabText}`}} >{}</p>
         </div>
 
     )
