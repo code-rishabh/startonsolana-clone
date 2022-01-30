@@ -14,7 +14,7 @@ const TweetCard = ({ tweetData }) => {
     //     console.log("nope");
     // }
     let m, p;
-    const pre = '<span class="text-blue-400 font-semibold">';
+    const pre = '<span class="text-gradient font-semibold">';
     const suff = '</span>';
 
     if (bodyText.includes("@")) {
